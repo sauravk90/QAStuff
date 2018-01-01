@@ -4,13 +4,16 @@ import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import main.utilities.Constants;
-import org.testng.ITest;
+import org.apache.log4j.*;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class TestBase extends Driver {
@@ -18,6 +21,10 @@ public class TestBase extends Driver {
     public static ExtentReports extent;
     public static ExtentTest test;
     public ITestResult result;
+    public Properties OR;
+    public File f1;
+    public FileInputStream file;
+    public static final Logger logger = Logger.getLogger(TestBase.class.getName());
 
     static {
         Calendar calender = Calendar.getInstance();
@@ -33,13 +40,14 @@ public class TestBase extends Driver {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         driver.navigate().to(Constants.URL);
-        System.out.println(browser + " browser initialized!");
+        logger.info(browser + " browser initialized!");
     }
 
     @BeforeMethod
     public void beforeMethod(Method result){
         test = extent.startTest(result.getName());
         test.log(LogStatus.INFO, " test started");
+        loadPropertiesFile();
     }
 
     @AfterMethod
@@ -56,7 +64,7 @@ public class TestBase extends Driver {
     @AfterSuite
     public void tearDown(){
         driver.quit();
-        System.out.println("Test Execution was completed.");
+        logger.info("Test Execution was completed.");
     }
 
     public void getResult(ITestResult result){
@@ -74,6 +82,14 @@ public class TestBase extends Driver {
             test.log(LogStatus.INFO, result.getName(), "Test is started");
         }
     }
+
+    public void loadPropertiesFile(){
+        String log4jConfPath = System.getProperty("user.dir") + "/src/main/config/log4j.properties";
+        PropertyConfigurator.configure(log4jConfPath);
+        logger.info("log4j configurations successfully loaded..");
+
+    }
+
 }
 
 

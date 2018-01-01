@@ -9,11 +9,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class Driver {
 
     //Global WebDriver declaration
     public static WebDriver driver;
+    public static final Logger logger = Logger.getLogger(Driver.class.getName());
 
     public static void Initialize(String driverType)
     {
@@ -61,6 +63,12 @@ public class Driver {
         wait.pollingEvery(pollTime, TimeUnit.SECONDS);
         wait.ignoring(NoSuchElementException.class);
         wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    public static void clickElement(WebElement element){
+        element.click();
+        logger.info("Clicked on element : " + element.toString());
+
     }
 
 
