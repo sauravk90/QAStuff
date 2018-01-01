@@ -1,10 +1,18 @@
 package main.testBase;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.concurrent.TimeUnit;
 
 public class Driver {
+
+    //Global WebDriver declaration
     public static WebDriver driver;
 
     public static void Initialize(String driverType)
@@ -27,7 +35,7 @@ public class Driver {
 
     private static void InitializeChrome()
     {
-        System.setProperty("webdriver.chrome.driver","C:\\Users\\Saurav PC\\IdeaProjects\\QAStuff\\src\\main\\config\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/src/main/drivers/chromedriver.exe");
         driver = new ChromeDriver();
     }
 
@@ -43,4 +51,17 @@ public class Driver {
         Chrome,
         Firefox
     }
+
+    public static void waitForElement(long time, WebElement element){
+        WebDriverWait wait = new WebDriverWait(driver, time);
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+    public static void waitForElementWithPolling(long time, int pollTime, WebElement element){
+        WebDriverWait wait = new WebDriverWait(driver, time);
+        wait.pollingEvery(pollTime, TimeUnit.SECONDS);
+        wait.ignoring(NoSuchElementException.class);
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+
 }

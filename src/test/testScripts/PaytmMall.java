@@ -3,7 +3,6 @@ package test.testScripts;
 import main.pageObjects.PaytmHomepage;
 import main.testBase.TestBase;
 import org.testng.annotations.Test;
-import static main.testBase.Driver.driver;
 
 public class PaytmMall extends TestBase {
 
